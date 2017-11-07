@@ -15,12 +15,27 @@ class ActivityController extends Controller
 
     public function index()
     {
-        return $this->model->all();
+        //dd(\App\ActivityCard::first()->status);
+        $model = $this->model->leftJoin('activity_users', 'activity_users.activity_id', 'activities.id');
+
+        $model->where(
+            function ($query) {
+                return $query
+                    ->where('activities.owner_id', auth()->user()->id)
+                    ->orWhere('activity_users.user_id', auth()->user()->id);
+            }
+        );
+
+        $model->select('activities.*')->with('cards')->with('comments');
+
+        return $model->get();
     }
 
     public function store(Request $request)
     {
-        return $this->model->create($request->all());
+        $params = $request->all();
+        $params['owner_id'] = auth()->user()->id;
+        return $this->model->create($params);
     }
 
     public function show($id)

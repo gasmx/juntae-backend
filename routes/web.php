@@ -11,3 +11,5 @@ Route::apiResource('/activity-user', 'ActivityUserController')->middleware('auth
 Route::apiResource('/activity-card', 'ActivityCardController')->middleware('auth:api');
 Route::apiResource('/activity-comment', 'ActivityCommentController')->middleware('auth:api');
 Route::apiResource('/activity-card-status', 'ActivityCardStatusController')->middleware('auth:api');
+
+Route::post('/user', 'UserController@store');
